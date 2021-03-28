@@ -1,7 +1,16 @@
 // 实现new Proxy(target, handler)
 
-import { extend, isObject } from '@vue/shared/src'
+import {
+  extend,
+  hasChanged,
+  hasOwn,
+  isArray,
+  isIntegerKey,
+  isObject
+} from '@vue/shared/src'
+import { track, trigger } from './effect'
 import { reactive, readonly } from './reactive'
+import { TrackOpTypes, TriggerOpTypes } from './operators'
 
 const get = createGetter()
 const shallowGet = createGetter(false, true)
@@ -25,6 +34,8 @@ function createGetter (isReadonly = false, shallow = false) {
     const res = Reflect.get(target, key, receiver) // target[key]
     if (!isReadonly) {
       // 收集依赖，等待数据变化后更新对应的视图
+
+      track(target, TrackOpTypes.GET, key)
     }
     if (shallow) {
       return res
@@ -41,7 +52,22 @@ function createGetter (isReadonly = false, shallow = false) {
 
 function createSetter (shallow = false) {
   return function set (target, key, value, receiver) {
+    const oldValue = target[key] // 获取老值
+    const hadKey =
+      isArray(target) && isIntegerKey(key)
+        ? Number(key) < target.length
+        : hasOwn(target, key)
     const result = Reflect.set(target, key, value, receiver)
+
+    // 当数据更新时候，需要通知更新effect
+    // 我们要区分是新增的，还是修改的
+    if (!hadKey) {
+      // 新增b
+      trigger(target, TriggerOpTypes.ADD, key, value)
+    } else if (hasChanged(oldValue, value)) {
+      // 修改
+      trigger(target, TriggerOpTypes.SET, key, value, oldValue)
+    }
     return result
   }
 }

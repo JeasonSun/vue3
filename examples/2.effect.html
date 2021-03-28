@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
+    <script>
+      const { reactive, effect } = VueReactivity
+      let state = reactive({ name: 'mojie', age: 32, other: 'xxx' })
+      let arr = reactive({fav: [1, 2, 3]})
+      effect(() => {
+        app.innerHTML = '姓名： ' + state.name + ' ； 年龄： ' + state.age + '；   fav： ' + arr.fav
+      })
+
+
+      setTimeout(() => {
+        state.name = 'jeason'
+        // arr.fav.length = 1
+        arr.fav[100] = 14
+      }, 1000)
+    </script>
+  </body>
+</html>
