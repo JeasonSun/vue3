@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
+    <script>
+      const { reactive, effect, ref, toRef } = VueReactivity
+      let proxy = reactive({name: 'mojie'})
+      let r = toRef(proxy, 'name')
+      console.log(r)
+      effect(() => {
+        app.innerHTML = '姓名： ' + r.value
+      })
+
+      setTimeout(() => {
+        r.value = 'jeason'
+      }, 1000)
+
+      // reactive 就是响应式API
+      // ref 普通值只能用ref
+      // 想要结构reactive -> toRefs 解构某一个toRef
+      // effect track  trigger
+
+
+      // watchEffect -> runtime core -> watch -> watch flush post
+    </script>
+  </body>
+</html>
