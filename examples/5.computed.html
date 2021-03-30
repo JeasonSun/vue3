@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
+    <script>
+      const { reactive, computed, ref, effect } = VueReactivity
+      // 缓存   computed  effect(lazy) + scheduler   缓存标识
+      const age = ref(18)
+      const myAge = computed(() => {
+        // 此方法默认不会被执行
+        console.log('runner')
+        return age.value + 10
+      })
+
+      // 当访问属性的时候执行
+      console.log(myAge.value, 'console1')
+      console.log(myAge.value, 'console2') // 缓存
+
+      effect(() => {
+        console.log(myAge.value, 'effect')
+      })
+
+      age.value = 100 // 更新age, myAge不会立刻重新计算
+
+      console.log(myAge.value, 'console3') // 再次计算最新值。
+    </script>
+  </body>
+</html>

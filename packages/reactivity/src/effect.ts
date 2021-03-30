@@ -88,7 +88,7 @@ export function trigger (target, type, key?, newValue?, oldValue?) {
     // 当修改数组的长度的时候，会触发
     // console.log(key, oldValue, newValue)
     depsMap.forEach((dep, key) => {
-      if(isSymbol(key)){
+      if (isSymbol(key)) {
         return
       }
       // 这边的key和上面的入参key不是一个
@@ -108,5 +108,11 @@ export function trigger (target, type, key?, newValue?, oldValue?) {
         }
     }
   }
-  effects.forEach((effect: any) => effect())
+  effects.forEach((effect: any) => {
+    if (effect.options.scheduler) {
+      effect.options.scheduler(effect)
+    } else {
+      effect()
+    }
+  })
 }
