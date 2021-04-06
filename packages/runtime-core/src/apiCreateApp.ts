@@ -1,3 +1,5 @@
+import { createVNode } from "./vnode"
+
 export function createAppAPI (render) {
   return function createApp (rootComponent, rootProps) {
     // 用哪个组件，哪个属性来创建应用。
@@ -22,7 +24,5 @@ export function createAppAPI (render) {
     return app
   }
 }
-function createVNode(rootComponent: any, rootProps: any) {
-  throw new Error("Function not implemented.")
-}
+
 

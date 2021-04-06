@@ -10,11 +10,17 @@
     <div id="app"></div>
     <script src="../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script>
     <script>
-      
       let { createApp } = VueRuntimeDOM
       let App = {
-        render () {
-          console.log('render')
+        setup () {
+          console.log('setup')
+          return {
+            a: '1'
+          }
+        },
+        render (proxy) {
+          console.log('render', proxy.a, proxy.name)
+
         }
       }
       createApp(App, { name: 'mojie', age: 32 }).mount('#app')
