@@ -9,6 +9,7 @@ import { nodeOps } from './nodeOps' // 对象
 import { extend } from '@vue/shared/src'
 import { createRenderer } from '@vue/runtime-core/src'
 
+
 // 渲染时候用到的所有方法
 const rendererOptions = extend({ patchProp }, nodeOps)
 
@@ -54,3 +55,5 @@ export function createApp (rootComponent, rootProps = null) {
 }
 // 用户调用的是runtime-dom -> runtime-core
 // runtime-dom 是为了解决平台差异
+
+export * from '@vue/runtime-core'

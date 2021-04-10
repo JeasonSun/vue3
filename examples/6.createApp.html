@@ -10,7 +10,7 @@
     <div id="app"></div>
     <script src="../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script>
     <script>
-      let { createApp } = VueRuntimeDOM
+      let { createApp, h } = VueRuntimeDOM
       let App = {
         setup () {
           console.log('setup')
@@ -20,7 +20,7 @@
         },
         render (proxy) {
           console.log('render', proxy.a, proxy.name)
-
+          return h('div', {style: {color: 'red'}}, 'hello world', 'mojie')
         }
       }
       createApp(App, { name: 'mojie', age: 32 }).mount('#app')

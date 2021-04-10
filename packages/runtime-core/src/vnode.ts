@@ -3,6 +3,11 @@
 import { isArray, isObject, isString, ShapeFlags } from '@vue/shared/src'
 
 // h()
+
+export const isVnode = vnode => {
+  return vnode.__v_isVnode
+}
+
 export const createVNode = (type, props, children = null) => {
   // 可以根据type来区分是组件，还是普通的元素
 
@@ -22,7 +27,7 @@ export const createVNode = (type, props, children = null) => {
     component: null,
     el: null, // 稍后会将虚拟节点和真实节点对应起来
     key: props && props.key, // diff算法会用到key
-    shapeFlag, // 判断出自己当前的shapeFlag,同时可以知道children的shapeFlag
+    shapeFlag // 判断出自己当前的shapeFlag,同时可以知道children的shapeFlag
   }
   normalizeChildren(vnode, children)
 
@@ -38,4 +43,11 @@ function normalizeChildren (vnode, children) {
     type = ShapeFlags.TEXT_CHILDREN
   }
   vnode.shapeFlag = type | vnode.shapeFlag
+}
+
+export const Text = Symbol('Text')
+export function normalizeVnode (child) {
+  if (isObject(child)) return child
+
+  return createVNode(Text, null, String(child))
 }
