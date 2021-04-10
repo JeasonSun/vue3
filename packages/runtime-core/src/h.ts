@@ -2,7 +2,7 @@ import { isArray, isObject } from '@vue/shared/src'
 import { createVNode, isVnode } from './vnode'
 
 export function h (type, propsOrChildren, children) {
-  console.log(type, propsOrChildren, children)
+  // console.log(type, propsOrChildren, children)
   const l = arguments.length // 儿子节点 要么是字符串， 要么是数组， 针对的是createVnode
 
   if (l === 2) {

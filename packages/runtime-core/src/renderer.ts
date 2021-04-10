@@ -2,6 +2,7 @@ import { effect } from '@vue/reactivity/src'
 import { ShapeFlags } from '@vue/shared/src'
 import { createAppAPI } from './apiCreateApp'
 import { createComponentInstance, setupComponent } from './component'
+import { queueJob } from './schedule'
 import { normalizeVnode, Text } from './vnode'
 
 export function createRenderer (rendererOptions) {
@@ -19,23 +20,30 @@ export function createRenderer (rendererOptions) {
   // ------------- 组件处理 Start ---------
   const setupRenderEffect = (instance, container) => {
     // 需要创建一个effect， 在effect中调用render方法， 这样render方法中拿到的数据会收集这个effect， 属性更新时候，effect会重新执行。
-    effect(function componentEffect () {
-      // 每个组件都有一个effect，vue3是组件级更新，数据变化，会重新执行对应组件的effect
-      if (!instance.isMounted) {
-        // 初次渲染
-        let proxyToUse = instance.proxy
-        // _vnode $
-        let subTree = (instance.subTree = instance.render.call(
-          proxyToUse,
-          proxyToUse
-        ))
-        console.log(subTree)
-        patch(null, subTree, container)
-        instance.isMounted = true
-      } else {
-        // 更新逻辑
+    effect(
+      function componentEffect () {
+        // 每个组件都有一个effect，vue3是组件级更新，数据变化，会重新执行对应组件的effect
+        if (!instance.isMounted) {
+          // 初次渲染
+          let proxyToUse = instance.proxy
+          // _vnode $
+          let subTree = (instance.subTree = instance.render.call(
+            proxyToUse,
+            proxyToUse
+          ))
+          // console.log(subTree)
+          patch(null, subTree, container)
+          instance.isMounted = true
+        } else {
+          // 更新逻辑
+          console.log('更新逻辑： diff')
+          // diff 算法
+        }
+      },
+      {
+        scheduler: queueJob  // scheduler可以用来控制effect的触发时机
       }
-    })
+    )
   }
   const mountComponent = (initialVNode, container) => {
     // console.log(initialVNode, container)
