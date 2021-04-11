@@ -25,6 +25,19 @@
         }
       }
       createApp(App, { name: 'mojie', age: 32 }).mount('#app')
+      // 将组件变成vnode -> vnode变成真实的dom -> 插入到页面上
+      // render方法的作用，可以渲染一个虚拟节点， 将他挂载到具体的dom元素上。
+      // vue3的执行核心是  patch 这个方法
+
+      // 组件创造的过程中
+          // 创造一个instance -> 初始化
+          // 根据用户传入的组件， 拿到对应的内容 来填充这个instance对象
+          // 创建effect组件，并且调用render方法，数据会将对应的effect收集起来。
+          // 拿到render方法返回的结果， 再次走渲染流程 -> patch
+      
+      // 组件渲染的顺序  是  先父后子， 执行顺序是深度优先。
+
+      // 每个组件都是一个effect组件
     </script>
   </body>
 </html>
